@@ -1,0 +1,785 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"bdrs",
+				"bdrs	border-radius"
+			],
+			[
+				"var",
+				"variations"
+			],
+			[
+				"b",
+				"b-a	bottom: auto;"
+			],
+			[
+				"va",
+				"variations"
+			],
+			[
+				"con",
+				"console"
+			],
+			[
+				"Formatio",
+				"FormationView"
+			],
+			[
+				"component",
+				"components"
+			],
+			[
+				"sc",
+				"scriptWatch"
+			],
+			[
+				"min",
+				"minifyCss"
+			],
+			[
+				"boo",
+				"bootstrap-sass"
+			],
+			[
+				"node",
+				"node_modules"
+			],
+			[
+				"marg",
+				"margin-top"
+			],
+			[
+				"mar",
+				"margin-right"
+			],
+			[
+				"inlin",
+				"inline-block"
+			],
+			[
+				"pad",
+				"padding-right"
+			],
+			[
+				"fl",
+				"fl-l	float: left;"
+			],
+			[
+				"a",
+				"anim	animation"
+			],
+			[
+				"anim",
+				"animn	animation-name: ${1:none};"
+			],
+			[
+				"ani",
+				"animdur	animation-duration: ${1:0}s;"
+			],
+			[
+				"pa",
+				"padding-right"
+			],
+			[
+				"tex",
+				"text-align"
+			],
+			[
+				"rg",
+				"rgba()"
+			],
+			[
+				"list",
+				"list-n	list-style-type: none;"
+			],
+			[
+				"ch",
+				"chartId"
+			],
+			[
+				"up",
+				"updateLegend"
+			],
+			[
+				"le",
+				"legend"
+			],
+			[
+				"gener",
+				"generateDataset"
+			],
+			[
+				"char",
+				"chartObj"
+			],
+			[
+				"data",
+				"datasets"
+			],
+			[
+				"push",
+				"pushTo"
+			],
+			[
+				"i",
+				"if	if"
+			],
+			[
+				"sens",
+				"sensors"
+			],
+			[
+				"rgb",
+				"rgbString"
+			],
+			[
+				"curr",
+				"currHSL"
+			],
+			[
+				"hsl",
+				"hslToRgb"
+			],
+			[
+				"for",
+				"for	for (…) {…}"
+			],
+			[
+				"ge",
+				"genHSV"
+			],
+			[
+				"toT",
+				"toTitleCase"
+			],
+			[
+				"new",
+				"newObj"
+			],
+			[
+				"cu",
+				"currentHSV"
+			],
+			[
+				"f",
+				"f	Anonymous Function"
+			],
+			[
+				"font",
+				"font-size"
+			],
+			[
+				"l",
+				"left"
+			],
+			[
+				"back",
+				"background-color"
+			],
+			[
+				"wi",
+				"width"
+			],
+			[
+				"pro",
+				"proto	Prototype"
+			],
+			[
+				"set",
+				"setAttribute"
+			],
+			[
+				"div",
+				"div_"
+			],
+			[
+				"app",
+				"appendChild"
+			],
+			[
+				"spa",
+				"spanText"
+			],
+			[
+				"c",
+				"createTextNode"
+			],
+			[
+				"fun",
+				"function"
+			],
+			[
+				"len",
+				"length"
+			],
+			[
+				"cal",
+				"calculateWidth"
+			],
+			[
+				"M",
+				"MapContextMenu"
+			],
+			[
+				"pr",
+				"projection"
+			],
+			[
+				"conte",
+				"contextMenu"
+			],
+			[
+				"an",
+				"anchor"
+			],
+			[
+				"ma",
+				"maxlen_"
+			],
+			[
+				"li",
+				"link	Tag"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 354.0,
+		"last_filter": "pcl",
+		"selected_items":
+		[
+			[
+				"pcl",
+				"Package Control: List Packages"
+			],
+			[
+				"them",
+				"Themr: List themes"
+			],
+			[
+				"therm",
+				"Themr: List themes"
+			],
+			[
+				"pcin",
+				"Package Control: Install Package"
+			],
+			[
+				"pcins",
+				"Package Control: Install Package"
+			],
+			[
+				"jsx",
+				"Set Syntax: JSX"
+			],
+			[
+				"ssjsx",
+				"Set Syntax: JSX"
+			],
+			[
+				"pcrp",
+				"Package Control: Remove Package"
+			],
+			[
+				"pci",
+				"Markdown Preview: Copy to Clipboard"
+			],
+			[
+				"git br",
+				"Git: Checkout New Branch"
+			],
+			[
+				"ss js",
+				"Set Syntax: JavaScript"
+			],
+			[
+				"git stat",
+				"Git: Status"
+			],
+			[
+				"lint",
+				"SublimeLinter: Lint This View"
+			],
+			[
+				"gitpush",
+				"Git: Push"
+			],
+			[
+				"gitstat",
+				"Git: Status"
+			],
+			[
+				"sublimelinter",
+				"SublimeLinter: Lint This View"
+			],
+			[
+				"ss html",
+				"Set Syntax: HTML"
+			],
+			[
+				"git status",
+				"Git: Status"
+			],
+			[
+				"GIT COM",
+				"Git: Commit"
+			],
+			[
+				"GITPUSH",
+				"Git: Push"
+			],
+			[
+				"git ad",
+				"Git: Add Current File"
+			],
+			[
+				"git pus",
+				"Git: Push"
+			],
+			[
+				"git c",
+				"Git: Commit"
+			],
+			[
+				"git add",
+				"Git: Add..."
+			],
+			[
+				"git com",
+				"Git: Commit"
+			],
+			[
+				"git",
+				"Git: Push"
+			],
+			[
+				"Package Control: i",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 449.0
+	},
+	"console":
+	{
+		"height": 126.0,
+		"history":
+		[
+			"import urllib.request,os,hashlib; h = '2915d1851351e5ee549c20394736b442' + '8bc59f460fa1548d1514676163dafc88'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)",
+			"import urllib.request,os,hashlib; h = '7183a2d3e96f11eeadd761d777e62404' + 'e330c659d4bb41d3bdf022e94cab3cd0'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://sublime.wbond.net/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/Users/chris/dev/cesium-drawhelper"
+	],
+	"file_history":
+	[
+		"/Users/chris/dev/football-tracker/package.json",
+		"/Users/chris/dev/football-tracker/app/index.html",
+		"/Users/chris/dev/football-tracker/app/testdata.json",
+		"/Users/chris/dev/football-tracker/app/scripts/components/Formation/Formation.jsx",
+		"/Users/chris/dev/football-tracker/gulpfile.js",
+		"/Users/chris/dev/football-tracker/app/scripts/components/Formation/FormationView.jsx",
+		"/Users/chris/dev/football-tracker/app/scripts/app.js",
+		"/Users/chris/dev/football-tracker/app/styles/main.scss",
+		"/Users/chris/dev/football-tracker/app/images",
+		"/Users/chris/dev/football-tracker/app/scripts/tests/Home.spec.js",
+		"/Users/chris/dev/football-tracker/dist/scripts/app.js",
+		"/Users/chris/dev/football-tracker/app/scripts/components/__tests__/Home.spec.js",
+		"/Users/chris/dev/football-tracker/dist/scripts/modernizr.js",
+		"/Users/chris/dev/football-tracker/.yo-rc.json",
+		"/Users/chris/dev/football-tracker/.editorconfig",
+		"/Users/chris/dev/football-tracker/app/scripts/components/home.js",
+		"/Users/chris/dev/football-tracker/bower.json",
+		"/Users/chris/dev/SparkPrint/app/scripts/job-cell.jsx",
+		"/Users/chris/dev/SparkPrint/.tmp/styles/main.css",
+		"/Users/chris/dev/SparkPrint/.tmp/styles/navigation.css",
+		"/Users/chris/dev/SparkPrint/app/styles/navigation.css",
+		"/Users/chris/dev/SparkPrint/.tmp/styles/responsive.css",
+		"/Users/chris/dev/SparkPrint/app/scripts/main.js",
+		"/Users/chris/dev/SparkPrint/.gitignore",
+		"/Users/chris/dev/SparkPrint/app/index.html",
+		"/Users/chris/dev/SparkPrint/Gruntfile.js",
+		"/Users/chris/dev/SparkPrint/dist/index.html",
+		"/Users/chris/dev/SparkPrint/.jshintrc",
+		"/Users/chris/dev/SparkPrint/app/styles/main.css",
+		"/Users/chris/dev/SparkPrint/SparkPrint.sublime-project",
+		"/Users/chris/dev/SparkPrint/app/scripts/chartTool.js",
+		"/Users/chris/Downloads/wordCloudBookmarklet.js",
+		"/Users/chris/dev/SparkPrint/app/scripts/parser.js",
+		"/Users/chris/dev/SparkPrint/README.md",
+		"/Users/chris/dev/react/node_modules/grunt-contrib-imagemin/node_modules/imagemin/node_modules/imagemin-gifsicle/node_modules/gifsicle/node_modules/bin-build/node_modules/download/node_modules/decompress-unzip/node_modules/yauzl/coverage/lcov-report/yauzl/index.html",
+		"/Users/chris/dev/website/website/js/main.js",
+		"/Users/chris/dev/website/website/about.html",
+		"/Users/chris/dev/website/website/index.html",
+		"/Users/chris/dev/website/website/fonts/glyphicons-halflings-regular.svg",
+		"/Users/chris/dev/website/website/pong/Pong.unity3d",
+		"/Users/chris/Documents/Lacrosse/Youth Rules Meeting.txt",
+		"/Volumes/Git 1.8.4.2 Snow Leopard Intel Universal/setup git PATH for non-terminal programs.sh"
+	],
+	"find":
+	{
+		"height": 25.0
+	},
+	"find_in_files":
+	{
+		"height": 94.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"sass",
+			" : {",
+			" : {\n			",
+			"}},",
+			"\n	},",
+			"	},",
+			"},",
+			"\\\"formationName\\\" : (\\\".*\\\"),\n	\"data\" : \\{",
+			"\n	\"",
+			"t formati",
+			"\"variations\"",
+			"\"Basic\", ",
+			"subFormations",
+			"home",
+			"Home",
+			"home",
+			"Home",
+			"\"subFormations\" : {}",
+			"((\\d)(\\.*))+(\\t*)",
+			"document",
+			"babel",
+			"home",
+			"script",
+			"node_",
+			"bower",
+			"cache",
+			"browserif",
+			"browserifu",
+			"build",
+			"\"/",
+			"verticalAlign",
+			"translateY(-50%)",
+			"li",
+			"ul",
+			"z-",
+			"\n		top: 2.8rem;",
+			"usemin",
+			"serve",
+			"-1r",
+			"-1",
+			"infinite",
+			"3s",
+			"X",
+			"translateY(10px) ",
+			"7.5",
+			"10px",
+			"8px",
+			"10",
+			"0",
+			"-12.5",
+			"25px",
+			"browserif",
+			"watch",
+			"js",
+			"  ",
+			"popul",
+			"popula",
+			"var ",
+			"j ",
+			"var ",
+			"#myChart",
+			"test",
+			"this.data",
+			"generate",
+			"this.chart",
+			"chart",
+			"this.data",
+			"pushTo",
+			"this.chart",
+			"this.data",
+			"this.currHSL",
+			"80%, 50%",
+			"this.currHSL",
+			"hsl",
+			"currentHSV",
+			"genHSV",
+			"currHSV",
+			"hsv",
+			"HSV",
+			"hsv",
+			"HSV",
+			"hsv",
+			"HSV",
+			"hsv",
+			"HSV",
+			"hsv",
+			"that",
+			"\"",
+			"mocha",
+			"this.div_",
+			"this.map_",
+			"ction();\n    var point = projection.fromLatLngToPoint(event.latLng);\n    this.div_.style.visibility = 'visib",
+			"maxlen_",
+			"();\n",
+			" //",
+			"USGSOverlay",
+			"class=\"\\w*\""
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": true,
+		"replace_history":
+		[
+			"{\\n\\t\\1 : {",
+			"{\\n\\t\\1",
+			"",
+			"\\t"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 25.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"output.git":
+	{
+		"height": 100.0
+	},
+	"output.git-checkout":
+	{
+		"height": 100.0
+	},
+	"output.git-commit":
+	{
+		"height": 100.0
+	},
+	"pinned_build_system": "",
+	"project": "cesium.sublime-project",
+	"replace":
+	{
+		"height": 46.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"formation",
+				"app/scripts/components/Formation/FormationView.jsx"
+			],
+			[
+				"test",
+				"app/testdata.json"
+			],
+			[
+				"gulp",
+				"gulpfile.js"
+			],
+			[
+				"pack",
+				"package.json"
+			],
+			[
+				"inde",
+				"app/index.html"
+			],
+			[
+				"formationview",
+				"app/scripts/components/Formation/FormationView.jsx"
+			],
+			[
+				"formatiovi",
+				"app/scripts/components/Formation/FormationView.jsx"
+			],
+			[
+				"app.",
+				"app/scripts/app.js"
+			],
+			[
+				"packa",
+				"package.json"
+			],
+			[
+				"main",
+				"app/styles/main.scss"
+			],
+			[
+				"react-add",
+				"node_modules/react/dist/react-with-addons.js"
+			],
+			[
+				"yorcjson",
+				".yo-rc.json"
+			],
+			[
+				"editorconfi",
+				".editorconfig"
+			],
+			[
+				"printer",
+				"app/printers.html"
+			],
+			[
+				"grunt",
+				"Gruntfile.js"
+			],
+			[
+				"main.cs",
+				"app/styles/main.css"
+			],
+			[
+				"nav",
+				"app/styles/navigation.css"
+			],
+			[
+				"maincs",
+				".tmp/styles/main.css"
+			],
+			[
+				"main.css",
+				".tmp/styles/main.css"
+			],
+			[
+				"gruntfi",
+				"Gruntfile.js"
+			],
+			[
+				"respon",
+				".tmp/styles/responsive.css"
+			],
+			[
+				"gitign",
+				".gitignore"
+			],
+			[
+				"main.js",
+				"app/scripts/main.js"
+			],
+			[
+				"ind",
+				"app/index.html"
+			],
+			[
+				"index",
+				"app/index.html"
+			],
+			[
+				"",
+				"*git-status*: SparkPrint"
+			],
+			[
+				"read",
+				"README.md"
+			],
+			[
+				"buildindex.h",
+				"node_modules/grunt-contrib-imagemin/node_modules/imagemin/node_modules/imagemin-gifsicle/node_modules/gifsicle/node_modules/bin-build/node_modules/download/node_modules/decompress-unzip/node_modules/yauzl/coverage/lcov-report/yauzl/index.html"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 200.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
