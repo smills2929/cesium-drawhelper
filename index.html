@@ -59,18 +59,10 @@
         var cesiumWidget = new Cesium.CesiumWidget('cesiumContainer', {scene3DOnly: true});
         var scene = cesiumWidget.scene;
 
-        // add terrain elevation
-        var cesiumTerrainProviderHeightmaps = new Cesium.CesiumTerrainProvider({
-            url : 'https://cesiumjs.org/tilesets/terrain/smallterrain',
-            credit : 'Terrain data courtesy Analytical Graphics, Inc.'
-        });
-
-        scene.terrainProvider = cesiumTerrainProviderHeightmaps;
-
         // start the draw helper to enable shape creation and editing
         var drawHelper = new DrawHelper(cesiumWidget);
         var toolbar = drawHelper.addToolbar(document.getElementById("toolbar"), {
-            buttons: ['marker', 'polyline', 'polygon', 'circle', 'extent']
+            buttons: ['marker', 'polyline', 'polygon', 'circle', 'rectangle']
         });
         toolbar.addListener('markerCreated', function(event) {
             loggingMessage('Marker created at ' + event.position.toString());
@@ -130,17 +122,17 @@
                 loggingMessage('Circle edited: radius is ' + event.radius.toFixed(1) + ' meters');
             });
         });
-        toolbar.addListener('extentCreated', function(event) {
-            var extent = event.extent;
-            loggingMessage('Extent created (N: ' + extent.north.toFixed(3) + ', E: ' + extent.east.toFixed(3) + ', S: ' + extent.south.toFixed(3) + ', W: ' + extent.west.toFixed(3) + ')');
-            var extentPrimitive = new DrawHelper.ExtentPrimitive({
-                extent: extent,
+        toolbar.addListener('rectangleCreated', function(event) {
+            var rectangle = event.rectangle;
+            loggingMessage('Rectangle created (N: ' + rectangle.north.toFixed(3) + ', E: ' + rectangle.east.toFixed(3) + ', S: ' + rectangle.south.toFixed(3) + ', W: ' + rectangle.west.toFixed(3) + ')');
+            var rectanglePrimitive = new DrawHelper.RectanglePrimitive({
+                rectangle: rectangle,
                 material: Cesium.Material.fromType(Cesium.Material.StripeType)
             });
-            scene.primitives.add(extentPrimitive);
-            extentPrimitive.setEditable();
-            extentPrimitive.addListener('onEdited', function(event) {
-                loggingMessage('Extent edited: extent is (N: ' + event.extent.north.toFixed(3) + ', E: ' + event.extent.east.toFixed(3) + ', S: ' + event.extent.south.toFixed(3) + ', W: ' + event.extent.west.toFixed(3) + ')');
+            scene.primitives.add(rectanglePrimitive);
+            rectanglePrimitive.setEditable();
+            rectanglePrimitive.addListener('onEdited', function(event) {
+                loggingMessage('Rectangle edited: rectangle is (N: ' + event.rectangle.north.toFixed(3) + ', E: ' + event.rectangle.east.toFixed(3) + ', S: ' + event.rectangle.south.toFixed(3) + ', W: ' + event.rectangle.west.toFixed(3) + ')');
             });
         });
 
