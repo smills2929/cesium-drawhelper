@@ -100,3 +100,13 @@ css rules for the infowindow
     border-top: 10px solid white;
 }
 
+/*
+edit tool
+ */
+.editTool {
+    position: absolute;
+    top: 20px;
+    right: 10px;
+    height: 50px;
+    background-color: #FFFDD0;
+}

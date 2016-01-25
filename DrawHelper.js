@@ -1193,6 +1193,34 @@ var DrawHelper = (function() {
             }
         }
 
+        function createLineWidthInput (primitive) {
+            var lineWidth = document.createElement('input');
+            lineWidth.type = 'range';
+            lineWidth.min = '1';
+            lineWidth.max = '10';
+            lineWidth.step = '1';
+            lineWidth.value = primitive.getWidth() || 1;
+            lineWidth.oninput = function() {
+                if(primitive.setWidth) {
+                    primitive.setWidth(lineWidth.value);
+                }
+            };
+            lineWidth.onchange = lineWidth.oninput;
+            return lineWidth;
+        }
+
+        function showEditTool(primitive){
+            //var toolbar = document.getElementById('toolbar');
+            var editTool = document.createElement('DIV');
+            editTool.id = "editTool";
+            editTool.className = "editTool";
+            
+            var lineWidth = createLineWidthInput(primitive);
+
+            editTool.appendChild(lineWidth);
+            document.body.appendChild(editTool);
+        }
+
         function setEditMode(editMode) {
                 // if no change
                 if(this._editMode == editMode) {
@@ -1202,6 +1230,7 @@ var DrawHelper = (function() {
                 drawHelper.disableAllHighlights();
                 // display markers
                 if(editMode) {
+                    showEditTool(this);
                     drawHelper.setEdited(this);
                     var scene = drawHelper._scene;
                     var _self = this;
@@ -1322,6 +1351,10 @@ var DrawHelper = (function() {
                         this._globeClickhandler.destroy();
                     }
                     this._editMode = false;
+                    var editTool = document.getElementById('editTool');
+                    if(editTool){
+                        document.body.removeChild(editTool);
+                    }
                 }
 
         }
