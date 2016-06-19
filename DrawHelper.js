@@ -89,17 +89,17 @@ var DrawHelper = (function() {
 
         // handlers for interactions
         // highlight polygon when mouse is entering
-        setListener(surface, 'mouseMove', function(position) {
+        /*setListener(surface, 'mouseMove', function(position) {
             surface.setHighlighted(true);
             if(!surface._editMode) {
                 _self._tooltip.showAt(position, "Click to edit this shape");
             }
-        });
+        });*/
         // hide the highlighting when mouse is leaving the polygon
-        setListener(surface, 'mouseOut', function(position) {
+        /*setListener(surface, 'mouseOut', function(position) {
             surface.setHighlighted(false);
             _self._tooltip.setVisible(false);
-        });
+        });*/
         setListener(surface, 'leftClick', function(position) {
             surface.setEditMode(true);
         });
@@ -291,7 +291,7 @@ var DrawHelper = (function() {
                                 depthTest : {
                                     enabled : true
                                 },
-                                lineWidth : Math.min(this.strokeWidth || 4.0, context._aliasedLineWidthRange[1])
+                                lineWidth : this.strokeWidth || 4.0
                             }
                         })
                     });
@@ -664,10 +664,10 @@ var DrawHelper = (function() {
             show : true,
             position : position,
             pixelOffset : new Cesium.Cartesian2(this._options.shiftX, this._options.shiftY),
-            eyeOffset : new Cesium.Cartesian3(0.0, 0.0, 0.0),
+            eyeOffset : new Cesium.Cartesian3(0.0, 0.0, -800.0),
             horizontalOrigin : Cesium.HorizontalOrigin.CENTER,
             verticalOrigin : Cesium.VerticalOrigin.CENTER,
-            scale : 1.0,
+            scale : 1.6,
             image: this._options.iconUrl,
             color : new Cesium.Color(1.0, 1.0, 1.0, 1.0)
         });
@@ -1166,6 +1166,8 @@ var DrawHelper = (function() {
         
         function setHighlighted(highlighted) {
 
+            console.log('setHighlighted');
+            console.log(highlighted);
             var scene = drawHelper._scene;
 
             // if no change
@@ -1203,6 +1205,7 @@ var DrawHelper = (function() {
                 // display markers
                 if(editMode) {
                     drawHelper.setEdited(this);
+                    this.setHighlighted(true);
                     var scene = drawHelper._scene;
                     var _self = this;
                     // create the markers and handlers for the editing
@@ -1322,6 +1325,7 @@ var DrawHelper = (function() {
                         this._globeClickhandler.destroy();
                     }
                     this._editMode = false;
+                    this.setHighlighted(false);
                 }
 
         }

@@ -56,6 +56,7 @@
 
     function start() {
         // create the almighty cesium widget
+        Cesium.BingMapsApi.defaultKey = "AgZIq4LVqMdl4KzYdXfjxyDZIIaK3oUn1kQICGJM-ZN0WVO5ajlsZyvMruQGG_xw";
         var cesiumWidget = new Cesium.CesiumWidget('cesiumContainer', {scene3DOnly: true});
         var scene = cesiumWidget.scene;
 
@@ -100,10 +101,16 @@
             loggingMessage('Polygon created with ' + event.positions.length + ' points');
             var polygon = new DrawHelper.PolygonPrimitive({
                 positions: event.positions,
-                material : Cesium.Material.fromType('Checkerboard')
+                material : Cesium.Material.fromType('Color', {
+                    color : Cesium.Color.RED.withAlpha(0.4)
+                }),
+                outline: true,
+                strokeColor: Cesium.Color.WHITE.withAlpha(0.5),
+                strokeWidth: 5.0
             });
             scene.primitives.add(polygon);
             polygon.setEditable();
+            //polygon.setStrokeStyle(Cesium.Color.WHITE, 10.0);
             polygon.addListener('onEdited', function(event) {
                 loggingMessage('Polygon edited, ' + event.positions.length + ' points');
             });
