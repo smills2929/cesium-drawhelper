@@ -386,15 +386,64 @@ var DrawHelper = (function() {
 
             this.isPolygon = true;
 
+
         }
 
         _.prototype = new ChangeablePrimitive();
 
+        _.prototype.getCenter = function() {
+            var positions = this.getPositions();
+            var cartographicArray = [];
+            Cesium.Ellipsoid.WGS84.cartesianArrayToCartographicArray(positions, cartographicArray);
+            console.log(cartographicArray);
+
+            function get_polygon_centroid(pts) {
+                var first = pts[0], last = pts[pts.length-1];
+                if (first.longitude != last.longitude || first.latitude != last.latitude) pts.push(first);
+                var twicearea=0,
+                x=0, y=0,
+                nPts = pts.length,
+                p1, p2, f;
+                for ( var i=0, j=nPts-1 ; i<nPts ; j=i++ ) {
+                    p1 = pts[i]; p2 = pts[j];
+                    f = p1.longitude*p2.latitude - p2.longitude*p1.latitude;
+                    twicearea += f;
+                    x += ( p1.longitude + p2.longitude ) * f;
+                    y += ( p1.latitude + p2.latitude ) * f;
+                }
+                f = twicearea * 3;
+                var centerCartesian = new Cesium.Cartesian3.fromRadians(x/f, y/f);
+                return centerCartesian; //{ x:x/f, y:y/f };
+            }
+
+            return get_polygon_centroid(cartographicArray);
+
+            var x = cartographicArray.map(function(a){ return a['longitude'] });
+            var y = cartographicArray.map(function(a){ return a['latitude'] });
+            var minX = Math.min.apply(null, x);
+            var maxX = Math.max.apply(null, x);
+            var minY = Math.min.apply(null, y);
+            var maxY = Math.max.apply(null, y);
+            var centerCartesian = new Cesium.Cartesian3.fromRadians((minX + maxX)/2, (minY + maxY)/2);
+            return centerCartesian;
+            var center = Cesium.BoundingSphere.fromPoints(positions).center;
+            Cesium.Ellipsoid.WGS84.scaleToGeodeticSurface(center, center);
+            return center;
+            //entity.position = new Cesium.ConstantPositionProperty(center);
+        };
+
+        _.prototype.setCenter = function(center) {
+            console.log('polygon set center called');
+            //this.setAttribute('center', center);
+        };
+
         _.prototype.setPositions = function(positions) {
             this.setAttribute('positions', positions);
+
         };
 
         _.prototype.getPositions = function() {
+
             return this.getAttribute('positions');
         };
 
@@ -1165,9 +1214,6 @@ var DrawHelper = (function() {
         }
         
         function setHighlighted(highlighted) {
-
-            console.log('setHighlighted');
-            console.log(highlighted);
             var scene = drawHelper._scene;
 
             // if no change
@@ -1212,6 +1258,8 @@ var DrawHelper = (function() {
                     if(this._markers == null) {
                         var markers = new _.BillboardGroup(drawHelper, dragBillboard);
                         var editMarkers = new _.BillboardGroup(drawHelper, dragHalfBillboard);
+                        var centerMarker = new _.BillboardGroup(drawHelper, dragBillboard);
+
                         // function for updating the edit markers around a certain point
                         function updateHalfMarkers(index, positions) {
                             // update the half markers before and after the index
@@ -1224,14 +1272,22 @@ var DrawHelper = (function() {
                                 editMarkers.getBillboard(editIndex).position = calculateHalfMarkerPosition(editIndex);
                             }
                         }
+
+                        function updateCenterMarker(){
+                            var centerMarkerPosition = _self.getCenter();
+                            centerMarker.getBillboard(0).position = centerMarkerPosition;
+                        }
+
                         function onEdited() {
                             _self.executeListeners({name: 'onEdited', positions: _self.positions});
                         }
+
                         var handleMarkerChanges = {
                             dragHandlers: {
                                 onDrag: function(index, position) {
                                     _self.positions[index] = position;
                                     updateHalfMarkers(index, _self.positions);
+                                    updateCenterMarker();
                                     _self._createPrimitive = true;
                                 },
                                 onDragEnd: function(index, position) {
@@ -1260,6 +1316,7 @@ var DrawHelper = (function() {
                         // add billboards and keep an ordered list of them for the polygon edges
                         markers.addBillboards(_self.positions, handleMarkerChanges);
                         this._markers = markers;
+
                         function calculateHalfMarkerPosition(index) {
                             var positions = _self.positions;
                             return ellipsoid.cartographicToCartesian(
@@ -1301,6 +1358,34 @@ var DrawHelper = (function() {
                         };
                         editMarkers.addBillboards(halfPositions, handleEditMarkerChanges);
                         this._editMarkers = editMarkers;
+
+                        // center marker
+                        var handleCenterMarkerChanges = {
+                            dragHandlers: {
+                                onDrag: function(index, position) {
+                                    _self.positions[index] = position;
+                                    updateHalfMarkers(index, _self.positions);
+                                    _self._createPrimitive = true;
+                                },
+                                onDragEnd: function(index, position) {
+                                    _self._createPrimitive = true;
+                                    onEdited();
+                                }
+                            },
+                            onDoubleClick: function(index) {
+                                _self.setEditable(false);
+                                scene.primitives.remove(_self);
+                            },
+                            tooltip: function() {
+                                if(_self.positions.length > 2) {
+                                    return "Double click to remove the polygon";
+                                }
+                            }
+                        };
+                        var centerMarkerPosition = _self.getCenter();
+                        centerMarker.addBillboards([centerMarkerPosition], handleCenterMarkerChanges);
+                        this._centerMarker = centerMarker;
+
                         // add a handler for clicking in the globe
                         this._globeClickhandler = new Cesium.ScreenSpaceEventHandler(scene.canvas);
                         this._globeClickhandler.setInputAction(
@@ -1314,14 +1399,17 @@ var DrawHelper = (function() {
                         // set on top of the polygon
                         markers.setOnTop();
                         editMarkers.setOnTop();
+                        centerMarker.setOnTop();
                     }
                     this._editMode = true;
                 } else {
                     if(this._markers != null) {
                         this._markers.remove();
                         this._editMarkers.remove();
+                        this._centerMarker.remove();
                         this._markers = null;
                         this._editMarkers = null;
+                        this._centerMarker = null;
                         this._globeClickhandler.destroy();
                     }
                     this._editMode = false;
