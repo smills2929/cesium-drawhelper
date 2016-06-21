@@ -385,8 +385,6 @@ var DrawHelper = (function() {
             this.initialiseOptions(options);
 
             this.isPolygon = true;
-
-
         }
 
         _.prototype = new ChangeablePrimitive();
@@ -395,7 +393,6 @@ var DrawHelper = (function() {
             var positions = this.getPositions();
             var cartographicArray = [];
             Cesium.Ellipsoid.WGS84.cartesianArrayToCartographicArray(positions, cartographicArray);
-            console.log(cartographicArray);
 
             function get_polygon_centroid(pts) {
                 var first = pts[0], last = pts[pts.length-1];
@@ -417,23 +414,11 @@ var DrawHelper = (function() {
             }
 
             return get_polygon_centroid(cartographicArray);
-
-            var x = cartographicArray.map(function(a){ return a['longitude'] });
-            var y = cartographicArray.map(function(a){ return a['latitude'] });
-            var minX = Math.min.apply(null, x);
-            var maxX = Math.max.apply(null, x);
-            var minY = Math.min.apply(null, y);
-            var maxY = Math.max.apply(null, y);
-            var centerCartesian = new Cesium.Cartesian3.fromRadians((minX + maxX)/2, (minY + maxY)/2);
-            return centerCartesian;
-            var center = Cesium.BoundingSphere.fromPoints(positions).center;
-            Cesium.Ellipsoid.WGS84.scaleToGeodeticSurface(center, center);
-            return center;
-            //entity.position = new Cesium.ConstantPositionProperty(center);
         };
 
         _.prototype.setCenter = function(center) {
             console.log('polygon set center called');
+            console.log(center);
             //this.setAttribute('center', center);
         };
 
@@ -1274,8 +1259,7 @@ var DrawHelper = (function() {
                         }
 
                         function updateCenterMarker(){
-                            var centerMarkerPosition = _self.getCenter();
-                            centerMarker.getBillboard(0).position = centerMarkerPosition;
+                            centerMarker.getBillboard(0).position = _self.getCenter();
                         }
 
                         function onEdited() {
@@ -1306,6 +1290,7 @@ var DrawHelper = (function() {
                                 editMarkers.removeBillboard(index);
                                 updateHalfMarkers(index, _self.positions);
                                 onEdited();
+                                updateCenterMarker();
                             },
                             tooltip: function() {
                                 if(_self.positions.length > 3) {
@@ -1342,6 +1327,7 @@ var DrawHelper = (function() {
                                 onDrag: function(index, position) {
                                     _self.positions[this.index] = position;
                                     _self._createPrimitive = true;
+                                    updateCenterMarker();
                                 },
                                 onDragEnd: function(index, position) {
                                     // create new sets of makers for editing
