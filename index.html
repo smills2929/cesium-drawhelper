@@ -98,6 +98,7 @@
 
         });
         toolbar.addListener('polygonCreated', function(event) {
+            console.log(event.positions);
             loggingMessage('Polygon created with ' + event.positions.length + ' points');
             var polygon = new DrawHelper.PolygonPrimitive({
                 positions: event.positions,
