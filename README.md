@@ -3,7 +3,7 @@ cesium-drawhelper
 
 DrawHelper: A very early stage shape editor for Cesium. Currently limited to 2D and simple shapes.
 
-Cesium version: Tested against Cesium v1.0.
+Cesium version: Tested against Cesium v1.22
 
 License: Apache 2.0. Free for commercial and non-commercial use. See LICENSE.md.
 
@@ -22,6 +22,6 @@ The toolbar can be customised at creation by passing an option object.
 
 Check the index.html example to get started.
 
-Check the website http://pad.geocento.com/DrawHelper/ for a live version.
+Check the website http://pad.geocento.com/DrawHelper/ for a live example of the older https://github.com/leforthomas/cesium-drawhelper version.
 
 Future versions will include shape dragging, scaling and rotation and support for hierarchical polygon editing.
