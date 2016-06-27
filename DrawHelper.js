@@ -13,11 +13,14 @@ var DrawHelper = (function() {
     // static variables
     var ellipsoid = Cesium.Ellipsoid.WGS84;
 
+    var drawHelper = null;
+
     // constructor
     function _(cesiumWidget) {
         this._scene = cesiumWidget.scene;
         this._tooltip = createTooltip(cesiumWidget.container);
         this._surfaces = [];
+        drawHelper = this;
 
         this.initialiseHandlers();
 
@@ -63,7 +66,7 @@ var DrawHelper = (function() {
                         mouseOutObject = pickedObject;
                     }
                     if(pickedObject.mouseMove) {
-                        pickedObject.mouseMove(movement.endPosition);
+                        callPrimitiveCallback('mouseMove', movement.endPosition);
                     }
                 }
             }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
@@ -75,15 +78,15 @@ var DrawHelper = (function() {
             function (movement) {
                 callPrimitiveCallback('leftDown', movement.position);
             }, Cesium.ScreenSpaceEventType.LEFT_DOWN);
-    }
+    };
 
     _.prototype.setListener = function(primitive, type, callback) {
         primitive[type] = callback;
-    }
+    };
 
     _.prototype.muteHandlers = function(muted) {
         this._handlersMuted = muted;
-    }
+    };
 
     // register event handling for an editable shape
     // shape should implement setEditMode and setHighlighted
@@ -97,10 +100,11 @@ var DrawHelper = (function() {
             if(!surface._editMode) {
                 _self._tooltip.showAt(position, "Click to edit this shape");
             }*/
-            if (surface._editMode && surface._dragging){
-                var cartesian = _self._scene.camera.pickEllipsoid(position, ellipsoid);
-                surface.onDrag(cartesian);
-            }
+
+            //if (surface._editMode && surface._dragging){
+            //    var cartesian = _self._scene.camera.pickEllipsoid(position, ellipsoid);
+            //    surface.onDrag(cartesian);
+            //}
         });
         // hide the highlighting when mouse is leaving the polygon
         /*setListener(surface, 'mouseOut', function(position) {
@@ -112,17 +116,19 @@ var DrawHelper = (function() {
         });
         setListener(surface, 'leftDown', function(position) {
             if (surface._editMode) {
-                _self._scene.screenSpaceCameraController.enableRotate = false;
-                surface._dragging = true;
+                if (surface.startDragging) {
+                    surface.startDragging();
+                }
             }
         });
         setListener(surface, 'leftUp', function(position) {
-            if (surface._editMode) {
-                surface._dragging = false;
-                _self._scene.screenSpaceCameraController.enableRotate = true;
-            }
+            /*if (surface._editMode) {
+                if (surface.stopDragging) {
+                    surface.stopDragging();
+                }
+            }*/
         });
-    }
+    };
 
     _.prototype.startDrawing = function(cleanUp) {
         // undo any current edit of shapes
@@ -133,7 +139,7 @@ var DrawHelper = (function() {
         }
         this.editCleanUp = cleanUp;
         this.muteHandlers(true);
-    }
+    };
 
     _.prototype.stopDrawing = function() {
         // check for cleanUp first
@@ -142,30 +148,30 @@ var DrawHelper = (function() {
             this.editCleanUp = null;
         }
         this.muteHandlers(false);
-    }
+    };
 
     // make sure only one shape is highlighted at a time
     _.prototype.disableAllHighlights = function() {
         this.setHighlighted(undefined);
-    }
+    };
 
     _.prototype.setHighlighted = function(surface) {
         if(this._highlightedSurface && !this._highlightedSurface.isDestroyed() && this._highlightedSurface != surface) {
             this._highlightedSurface.setHighlighted(false);
         }
         this._highlightedSurface = surface;
-    }
+    };
 
     _.prototype.disableAllEditMode = function() {
         this.setEdited(undefined);
-    }
+    };
 
     _.prototype.setEdited = function(surface) {
         if(this._editedSurface && !this._editedSurface.isDestroyed()) {
             this._editedSurface.setEditMode(false);
         }
         this._editedSurface = surface;
-    }
+    };
 
     var material = Cesium.Material.fromType(Cesium.Material.ColorType);
     material.uniforms.color = new Cesium.Color(1.0, 1.0, 0.0, 0.5);
@@ -408,96 +414,108 @@ var DrawHelper = (function() {
 
         _.prototype = new ChangeablePrimitive();
 
-        _.prototype.getCenter = function() {
-            var positions = this.getPositions();
-            var cartographicArray = [];
-            Cesium.Ellipsoid.WGS84.cartesianArrayToCartographicArray(positions, cartographicArray);
-
-            function get_polygon_centroid(pts) {
-                var getArea = function (pts) {
-                    var area = 0,
-                        i,
-                        j,
-                        point1,
-                        point2;
-
-                    for (i = 0, j = pts.length - 1; i < pts.length; j = i, i += 1) {
-                        point1 = pts[i];
-                        point2 = pts[j];
-                        area += Cesium.Math.toDegrees(point1.longitude) * Cesium.Math.toDegrees(point2.latitude);
-                        area -= Cesium.Math.toDegrees(point1.latitude) * Cesium.Math.toDegrees(point2.longitude);
-                    }
-                    area /= 2;
-
-                    return area;
-                };
-                var x = 0,
-                    y = 0,
-                    i,
-                    j,
-                    f,
-                    point1,
-                    point2;
-
-                for (i = 0, j = pts.length - 1; i < pts.length; j = i, i += 1) {
-                    point1 = pts[i];
-                    point2 = pts[j];
-                    f = (Cesium.Math.toDegrees(point1.longitude) * Cesium.Math.toDegrees(point2.latitude) -
-                         Cesium.Math.toDegrees(point2.longitude) * Cesium.Math.toDegrees(point1.latitude));
-                    x += (Cesium.Math.toDegrees(point1.longitude) + Cesium.Math.toDegrees(point2.longitude)) * f;
-                    y += (Cesium.Math.toDegrees(point1.latitude) + Cesium.Math.toDegrees(point2.latitude)) * f;
-                }
-
-                console.log(x);
-                console.log(y);
-                console.log(getArea(pts));
-
-                f = getArea(pts) * 6;
-
-                var centerCartesian = new Cesium.Cartesian3.fromDegrees(x/f, y/f);
-                return centerCartesian;
-            //};
-
-
-                /*var first = pts[0], last = pts[pts.length-1];
-                if (first.longitude != last.longitude || first.latitude != last.latitude) pts.push(first);
-                var twicearea=0,
-                x=0, y=0,
-                nPts = pts.length,
-                p1, p2, f;
-                for ( var i=0, j=nPts-1 ; i<nPts ; j=i++ ) {
-                    p1 = pts[i]; p2 = pts[j];
-                    f = p1.longitude*p2.latitude - p2.longitude*p1.latitude;
-                    twicearea += f;
-                    x += ( p1.longitude + p2.longitude ) * f;
-                    y += ( p1.latitude + p2.latitude ) * f;
-                }
-                f = twicearea * 3;
-                var centerCartesian = new Cesium.Cartesian3.fromRadians(x/f, y/f);
-                return centerCartesian;*/ //{ x:x/f, y:y/f };
-            }
-
-            return get_polygon_centroid(cartographicArray);
-        };
-
         _.prototype.onDrag = function(position){
-            this.onShapeDrag(position);
+            var cartesian = drawHelper._scene.camera.pickEllipsoid(position, ellipsoid);
+            this.onShapeDrag(cartesian);
 
             //onEdited();
             //this.setCenter(position);
         };
 
-        /*_.prototype.setCenter = function(newCenter) {
-            var currentCenter = this.getCenter();
-            var difference = new Cesium.Cartesian3();
-            Cesium.Cartesian3.subtract(newCenter, currentCenter, difference);
-            console.log(difference);
+        _.prototype.listenForGlobalMouseUp = function(){
+            this.globalMouseUpHandler = new Cesium.ScreenSpaceEventHandler(drawHelper._scene.canvas);
+            var _self = this;
+            this.globalMouseUpHandler.setInputAction(
+            function (movement) {
+                _self.stopDragging(movement.endPosition);
+            }, Cesium.ScreenSpaceEventType.LEFT_UP);
+        }
 
-            for(var i = 0; i < this.positions.length; i++) {
-                Cesium.Cartesian3.add(difference, this.positions[i], this.positions[i]);
+        _.prototype.listenForGlobalMouseMoves = function(){
+            if (this.globalMouseMoveHandler){
+                this.globalMouseMoveHandler.destroy();
             }
-            //this.setAttribute('center', center);
-        };*/
+            this.globalMouseMoveHandler = new Cesium.ScreenSpaceEventHandler(drawHelper._scene.canvas);
+            var _self = this;
+            this.globalMouseMoveHandler.setInputAction(
+            function (movement) {
+                _self.onDrag(movement.endPosition);
+            }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
+        };
+
+        _.prototype.startDragging = function(position){
+            this._previousMouseLocation = position;
+            drawHelper._scene.screenSpaceCameraController.inertiaSpin = 0;
+            drawHelper._scene.screenSpaceCameraController.enableRotate = false;
+            this._dragging = true;
+            this.listenForGlobalMouseMoves();
+            this.listenForGlobalMouseUp();
+            this.hideMarkers();
+        };
+
+        _.prototype.stopDragging = function(position){
+            drawHelper._scene.screenSpaceCameraController.enableRotate = true;
+            drawHelper._scene.screenSpaceCameraController.inertiaSpin = 0.9;
+            //setTimeout(function(){drawHelper._scene.screenSpaceCameraController.enableRotate = true;}, 350);
+            this._dragging = false;
+            if (this.globalMouseMoveHandler) {
+                this.globalMouseMoveHandler.destroy();
+                this.globalMouseMoveHandler = null;
+            }
+            if (this.globalMouseUpHandler) {
+                this.globalMouseUpHandler.destroy();
+                this.globalMouseUpHandler = null;
+            }
+            this.showMarkers();
+            this.updateMarkerLocations();
+            if (this.positions) {
+                this.updateHalfMarkers(null, this.positions);
+            }
+            //this.setEditMode(false);
+            //this.setEditMode(true);
+        };
+
+        _.prototype.updateMarkerLocations = function() {
+            if (this._markers) {
+                this._markers.updateBillboardsPositions(this.positions);
+                // for (var index = 0; index < this._markers.countBillboards(); index++) {
+                //     this._markers.hideBillboard(index);
+                // }
+            }
+            if (this._editMarkers) {
+
+                this._editMarkers.updateBillboardsPositions(this.positions);
+                // for (var index = 0; index < this._editMarkers.countBillboards(); index++) {
+                //     this._editMarkers.hideBillboard(index);
+                // }
+            }
+        };
+
+        _.prototype.hideMarkers = function(){
+            if (this._markers) {
+                for (var index = 0; index < this._markers.countBillboards(); index++) {
+                    this._markers.hideBillboard(index);
+                }
+            }
+            if (this._editMarkers) {
+                for (var index = 0; index < this._editMarkers.countBillboards(); index++) {
+                    this._editMarkers.hideBillboard(index);
+                }
+            }
+        };
+
+        _.prototype.showMarkers = function(){
+            if (this._markers) {
+                for (var index = 0; index < this._markers.countBillboards(); index++) {
+                    this._markers.showBillboard(index);
+                }
+            }
+            if (this._editMarkers) {
+                for (var index = 0; index < this._editMarkers.countBillboards(); index++) {
+                    this._editMarkers.showBillboard(index);
+                }
+            }
+        };
 
         _.prototype.setPositions = function(positions) {
             this.setAttribute('positions', positions);
@@ -529,7 +547,7 @@ var DrawHelper = (function() {
             return Cesium.PolygonOutlineGeometry.fromPositions({
                 positions : this.getPositions()
             });
-        }
+        };
 
         return _;
     })();
@@ -789,6 +807,12 @@ var DrawHelper = (function() {
             var screenSpaceCameraController = this._scene.screenSpaceCameraController;
             function enableRotation(enable) {
                 screenSpaceCameraController.enableRotate = enable;
+                if (enable){
+                    screenSpaceCameraController.inertiaSpin = 0.9;
+                }
+                else{
+                    screenSpaceCameraController.inertiaSpin = 0.0;
+                }
             }
             function getIndex() {
                 // find index
@@ -808,6 +832,7 @@ var DrawHelper = (function() {
                     }
                     function onDragEnd(position) {
                         handler.destroy();
+                        //setTimeout(function(){enableRotation(true);}, 350);
                         enableRotation(true);
                         callbacks.dragHandlers.onDragEnd && callbacks.dragHandlers.onDragEnd(getIndex(), position);
                     }
@@ -853,7 +878,7 @@ var DrawHelper = (function() {
         }
 
         return billboard;
-    }
+    };
 
     _.BillboardGroup.prototype.insertBillboard = function(index, position, callbacks) {
         this._orderedBillboards.splice(index, 0, this.createBillboard(position, callbacks));
@@ -861,7 +886,15 @@ var DrawHelper = (function() {
 
     _.BillboardGroup.prototype.addBillboard = function(position, callbacks) {
         this._orderedBillboards.push(this.createBillboard(position, callbacks));
-    }
+    };
+
+    _.BillboardGroup.prototype.hideBillboard = function(index) {
+        this._orderedBillboards[index].show = false;
+    };
+
+    _.BillboardGroup.prototype.showBillboard = function(index) {
+        this._orderedBillboards[index].show = true;
+    };
 
     _.BillboardGroup.prototype.addBillboards = function(positions, callbacks) {
         var index =  0;
@@ -888,7 +921,7 @@ var DrawHelper = (function() {
     _.BillboardGroup.prototype.removeBillboard = function(index) {
         this._billboards.remove(this.getBillboard(index));
         this._orderedBillboards.splice(index, 1);
-    }
+    };
 
     _.BillboardGroup.prototype.remove = function() {
         this._billboards = this._billboards && this._billboards.removeAll() && this._billboards.destroy();
@@ -948,12 +981,12 @@ var DrawHelper = (function() {
     _.prototype.startDrawingPolygon = function(options) {
         var options = copyOptions(options, defaultSurfaceOptions);
         this.startDrawingPolyshape(true, options);
-    }
+    };
 
     _.prototype.startDrawingPolyline = function(options) {
         var options = copyOptions(options, defaultPolylineOptions);
         this.startDrawingPolyshape(false, options);
-    }
+    };
 
     _.prototype.startDrawingPolyshape = function(isPolygon, options) {
 
@@ -1326,7 +1359,12 @@ var DrawHelper = (function() {
                             // If index not defined, update all half markers
                             if (!index){
                                 for (var markerIndex = 0; markerIndex < editMarkers.countBillboards(); markerIndex++){
-                                    editMarkers.getBillboard(markerIndex).position = calculateHalfMarkerPosition(markerIndex)
+                                    var billboard = editMarkers.getBillboard(markerIndex);
+                                    var halfMarkerPosition = calculateHalfMarkerPosition(markerIndex);
+
+                                    if (billboard._billboardCollection)
+                                        billboard.position = halfMarkerPosition;
+                                    
                                 }
                             }
                             // else update the half markers before and after the index
@@ -1347,26 +1385,23 @@ var DrawHelper = (function() {
                         }
 
                         var shapeMoveDragHandler = function(position){
-
-
-                            if (this._previousMouseLocation) {
-                                var difference = new Cesium.Cartesian3();
-                                Cesium.Cartesian3.subtract(position, this._previousMouseLocation, difference);
-                                console.log(difference);
-
-                                for (var i = 0; i < this.positions.length; i++) {
-                                    Cesium.Cartesian3.add(difference, this.positions[i], this.positions[i]);
+                            if (position) {
+                                if (this._previousMouseLocation) {
+                                    var difference = new Cesium.Cartesian3();
+                                    Cesium.Cartesian3.subtract(position, this._previousMouseLocation, difference);
+                                    for (var i = 0; i < this.positions.length; i++) {
+                                        Cesium.Cartesian3.add(difference, this.positions[i], this.positions[i]);
+                                    }
                                 }
-                            }
 
-                            this._previousMouseLocation = position;
-                            updateHalfMarkers(null, this.positions);
-                            this._createPrimitive = true;
-                            //this.setCenter(position);
-                            onEdited();
+                                this._previousMouseLocation = position;
+                                this._createPrimitive = true;
+                                onEdited();
+                            }
                         };
 
                         this.onShapeDrag = shapeMoveDragHandler;
+                        this.updateHalfMarkers = updateHalfMarkers;
 
                         var handleMarkerChanges = {
                             dragHandlers: {
@@ -1467,7 +1502,9 @@ var DrawHelper = (function() {
                         this._markers = null;
                         this._editMarkers = null;
                         this._globeClickhandler.destroy();
-                        this._dragging = false;
+                        if (this.stopDragging) {
+                            this.stopDragging();
+                        }
                     }
                     this._editMode = false;
                     this.setHighlighted(false);
@@ -1502,17 +1539,17 @@ var DrawHelper = (function() {
                 } else {
                     this.setWidth(originalWidth);
                 }
-            }
+            };
 
             polyline.getRectangle = function() {
                 return Cesium.Rectangle.fromCartographicArray(ellipsoid.cartesianArrayToCartographicArray(this.positions));
-            }
+            };
 
             enhanceWithListeners(polyline);
 
             polyline.setEditMode(false);
 
-        }
+        };
 
         DrawHelper.PolygonPrimitive.prototype.setEditable = function() {
 
@@ -1530,8 +1567,7 @@ var DrawHelper = (function() {
             enhanceWithListeners(polygon);
 
             polygon.setEditMode(false);
-
-        }
+        };
 
         DrawHelper.RectanglePrimitive.prototype.setEditable = function() {
 
@@ -1601,15 +1637,14 @@ var DrawHelper = (function() {
                     }
                     this._editMode = false;
                 }
-            }
+            };
 
             rectangle.setHighlighted = setHighlighted;
 
             enhanceWithListeners(rectangle);
 
             rectangle.setEditMode(false);
-
-        }
+        };
 
         _.EllipsePrimitive.prototype.setEditable = function() {
 
@@ -1687,14 +1722,14 @@ var DrawHelper = (function() {
                     }
                     this._editMode = false;
                 }
-            }
+            };
 
             ellipse.setHighlighted = setHighlighted;
 
             enhanceWithListeners(ellipse);
 
             ellipse.setEditMode(false);
-        }
+        };
 
         _.CirclePrimitive.prototype.getCircleCartesianCoordinates = function (granularity) {
             var geometry = Cesium.CircleOutlineGeometry.createGeometry(new Cesium.CircleOutlineGeometry({ellipsoid: ellipsoid, center: this.getCenter(), radius: this.getRadius(), granularity: granularity}));
@@ -1780,7 +1815,7 @@ var DrawHelper = (function() {
                     }
                     this._editMode = false;
                 }
-            }
+            };
 
             circle.setHighlighted = setHighlighted;
 
@@ -1789,7 +1824,7 @@ var DrawHelper = (function() {
             circle.setEditMode(false);
         }
 
-    }
+    };
 
     _.DrawHelperWidget = (function() {
 
@@ -1898,7 +1933,7 @@ var DrawHelper = (function() {
     _.prototype.addToolbar = function(container, options) {
         options = copyOptions(options, {container: container});
         return new _.DrawHelperWidget(this, options);
-    }
+    };
 
     function getRectangle(mn, mx) {
         var e = new Cesium.Rectangle();
